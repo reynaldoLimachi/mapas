@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card shadow-sm" style="max-width:600px; margin:auto;">
+  <div class="card-body">
+    <h4 class="card-title mb-3">Editar Centro de Salud</h4>
+
+    <form method="POST">
+      <div class="mb-3">
+        <label>Nombre:</label>
+        <input type="text" name="nombre" class="form-control" required value="{{ centro.nombre }}">
+      </div>
+
+      <div class="mb-3">
+        <label>Tipo:</label>
+        <select name="tipo" class="form-control" required>
+          <option value="hospital" {% if centro.tipo=="hospital" %}selected{% endif %}>Hospital</option>
+          <option value="centro" {% if centro.tipo=="centro" %}selected{% endif %}>Centro</option>
+          <option value="posta" {% if centro.tipo=="posta" %}selected{% endif %}>Posta</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label>Dirección:</label>
+        <input type="text" name="direccion" class="form-control" value="{{ centro.direccion }}">
+      </div>
+
+      <div class="mb-3">
+        <label>Latitud:</label>
+        <input type="number" step="any" name="lat" class="form-control" required value="{{ centro.lat }}">
+      </div>
+
+      <div class="mb-3">
+        <label>Longitud:</label>
+        <input type="number" step="any" name="lon" class="form-control" required value="{{ centro.lon }}">
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Actualizar</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

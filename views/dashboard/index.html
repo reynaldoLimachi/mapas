@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Panel de Gestión</h2>
+
+<!-- Pestañas -->
+<ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="estadisticas-tab" data-bs-toggle="tab" data-bs-target="#estadisticas"
+      type="button" role="tab">Estadísticas</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="centros-tab" data-bs-toggle="tab" data-bs-target="#centros" type="button"
+      role="tab">Centros</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="usuarios-tab" data-bs-toggle="tab" data-bs-target="#usuarios" type="button"
+      role="tab">Usuarios</button>
+  </li>
+</ul>
+
+<div class="tab-content mt-3" id="dashboardTabsContent">
+
+  <!-- Estadísticas -->
+  <div class="tab-pane fade show active" id="estadisticas" role="tabpanel">
+    <div class="row text-center">
+
+      <div class="col-md-3">
+        <div class="card shadow-sm p-3 mb-3">
+          <img src="{{ url_for('static', filename='img/hospital.png') }}" class="mx-auto mb-2" width="50">
+          <h5>Hospitales</h5>
+          <h2>{{ estadisticas.hospitales }}</h2>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card shadow-sm p-3 mb-3">
+          <img src="{{ url_for('static', filename='img/centro.png') }}" class="mx-auto mb-2" width="50">
+          <h5>Centros</h5>
+          <h2>{{ estadisticas.centros }}</h2>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card shadow-sm p-3 mb-3">
+          <img src="{{ url_for('static', filename='img/posta.png') }}" class="mx-auto mb-2" width="50">
+          <h5>Postas</h5>
+          <h2>{{ estadisticas.postas }}</h2>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card shadow-sm p-3 mb-3">
+          <img src="{{ url_for('static', filename='img/usuario.png') }}" class="mx-auto mb-2" width="50">
+          <h5>Usuarios</h5>
+          <h2>{{ estadisticas.usuarios }}</h2>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Centros de Salud -->
+  <div class="tab-pane fade" id="centros" role="tabpanel">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h4>Centros de Salud Registrados</h4>
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalRegistrarCentro">
+        <i class="bi bi-plus-circle"></i> Registrar Centro
+      </button>
+    </div>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Tipo</th>
+          <th>Dirección</th>
+          <th>Lat</th>
+          <th>Lon</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in centros %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ c.nombre }}</td>
+          <td>{{ c.tipo }}</td>
+          <td>{{ c.direccion }}</td>
+          <td>{{ c.lat }}</td>
+          <td>{{ c.lon }}</td>
+          <td class="text-center">
+            <a href="{{ url_for('dashboard_bp.editar_centro', id=c.id) }}" class="btn btn-warning btn-sm"
+              title="Editar">
+              <i class="bi bi-pencil"></i>Editar
+            </a>
+            <form method="POST" action="{{ url_for('dashboard_bp.eliminar_centro', id=c.id) }}" style="display:inline;">
+              <button type="submit" class="btn btn-danger btn-sm"
+                onclick="return confirm('¿Seguro de eliminar este centro?');" title="Eliminar">
+                <i class="bi bi-trash-fill"></i>Eliminar
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal Registrar Centro -->
+  <div class="modal fade" id="modalRegistrarCentro" tabindex="-1" aria-labelledby="modalRegistrarCentroLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalRegistrarCentroLabel">Registrar Centro de Salud</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="{{ url_for('dashboard_bp.registrar_centro') }}">
+            <div class="mb-3">
+              <label>Nombre:</label>
+              <input type="text" name="nombre" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label>Tipo:</label>
+              <select name="tipo" class="form-control" required>
+                <option value="hospital">Hospital</option>
+                <option value="centro">Centro</option>
+                <option value="posta">Posta</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label>Dirección:</label>
+              <input type="text" name="direccion" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label>Latitud:</label>
+              <input type="number" step="any" name="lat" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label>Longitud:</label>
+              <input type="number" step="any" name="lon" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Registrar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Usuarios -->
+  <div class="tab-pane fade" id="usuarios" role="tabpanel">
+    <h4>Usuarios Registrados</h4>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Fecha Registro</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in usuarios %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ u.nombre }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.fecha_registro }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}

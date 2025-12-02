@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="map-container" style="display:flex; height:80vh; gap:10px;">
+
+  <!-- Panel izquierdo: búsqueda y resultados -->
+  <div class="search-panel" style="width:30%; display:flex; flex-direction:column;">
+    <h3>Buscar Centros de Salud</h3>
+    <input type="text" id="searchInput" placeholder="Nombre del centro" style="padding:5px; margin-bottom:5px;">
+
+    <div style="margin-bottom:10px; line-height:32px;">
+
+      <label style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <input type="checkbox" class="tipo-filter" value="hospital" checked>
+        <img src="{{ url_for('static', filename='img/hospital.png') }}" width="32" height="32">
+        <span>Hospital</span>
+      </label>
+
+      <label style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <input type="checkbox" class="tipo-filter" value="centro" checked>
+        <img src="{{ url_for('static', filename='img/centro.png') }}" width="32" height="32">
+        <span>Centro</span>
+      </label>
+
+      <label style="display:flex; align-items:center; gap:10px;">
+        <input type="checkbox" class="tipo-filter" value="posta" checked>
+        <img src="{{ url_for('static', filename='img/posta.png') }}" width="32" height="32">
+        <span>Posta</span>
+      </label>
+
+    </div>
+
+
+    <button id="btnClear" style="margin-bottom:5px;">Limpiar filtros</button>
+
+    <div id="results" style="flex:1; overflow-y:auto; border:1px solid #ccc; padding:5px;"></div>
+  </div>
+
+  <!-- Panel derecho: mapa -->
+  <div id="map" style="flex:1; border:1px solid #ccc;"></div>
+</div>
+
+<!-- Vincular Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Tu JS del mapa -->
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+{% endblock %}
